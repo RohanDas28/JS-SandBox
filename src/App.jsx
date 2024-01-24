@@ -1,24 +1,50 @@
-import React from "react"
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MonacoEditor from 'react-monaco-editor';
 
-
-
 function App() {
+  const [code, setCode] = useState('');
+  const [result, setResult] = useState('');
 
-  const [code, setCode] = useState('Write your Code!')
-  const handleRunCode = () =>{
-    try{
-      eval(code)
-    } catch(error) {
-      console.error('Error Running Code!!', error)
+  useEffect(() => {
+    const originalConsoleLog = console.log;
+    console.log = (...args) => {
+      setResult(prevResult => prevResult + args.map(arg => (arg !== undefined ? arg : 'undefined')).join(' ') + '\n');
+      originalConsoleLog.apply(console, args);
+    };
+  
+    return () => {
+      console.log = originalConsoleLog;
+    };
+  }, []);
+  
+  const handleRunCode = () => {
+    try {
+      setResult('');
+      let consoleLogOutput = '';
+      const originalConsoleLog = console.log;
+      console.log = (...args) => {
+        consoleLogOutput += args.map(arg => (arg !== undefined ? arg : 'undefined')).join(' ') + '\n';
+        originalConsoleLog.apply(console, args);
+      };
+  
+      const output = eval(code);
+  
+      console.log = originalConsoleLog;
+      setResult(consoleLogOutput);
+  
+      if (output !== undefined) {
+        setResult(prevResult => prevResult + 'Result: ' + output + '\n');
+      }
+    } catch (error) {
+      console.error('Error Running Code!!', error);
+      setResult(prevResult => prevResult + `Error: ${error.message}\n`);
     }
-  }
+  };
+  
   const editorOptions = {
     selectOnLineNumbers: true,
     automaticLayout: true,
-  }
-
+  };
 
   return (
     <>
@@ -36,37 +62,35 @@ function App() {
           </nav>
         </div>
       </header>
-      <div className="h-screen w-full bg-gray-800 text-white">
-        <div className="">
-
-        <MonacoEditor
-        width="800"
-        height="600"
-        language="javascript"
-        theme="vs-dark"
-        value={code}
-        options={editorOptions}
-        onChange={(newCode) =>setCode(newCode)}
-      />
-        <button onClick={handleRunCode} className="bg-gray-400 px-2 py-3 rounded-2xl shadow-lg hover:bg-gray-600 transition-all my-2">RUN ME DADDY</button>
-
+      <div className="h-[90vh] w-full bg-gray-800 text-white">
+        <div className="py-6 px-4 flex flex-col gap-4">
+          <MonacoEditor
+            height={600}
+            language="javascript"
+            theme="vs-dark"
+            value={code}
+            options={editorOptions}
+            onChange={(newCode) => setCode(newCode)}
+          />
+          <button onClick={handleRunCode} className="bg-yellow-400 px-2 py-3 text-black font-semibold rounded-2xl shadow-lg hover:bg-yellow-500 transition-all my-2">RUN ME DADDY</button>
+          <div className="resul font-semibold">
+            <h2>Result is:</h2>
+            <pre>{result}</pre>
+          </div>
         </div>
       </div>
-
-
-      <footer class="text-gray-400 bg-gray-900 body-font">
-        <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
-          <a class="flex title-font font-medium items-center md:justify-start justify-center text-white">
-            <span class="ml-3 text-xl">RoroCode</span>
+      <footer className="text-gray-400 bg-gray-900 body-font">
+        <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
+          <a className="flex title-font font-medium items-center md:justify-start justify-center text-white">
+            <span className="ml-3 text-xl">RoroCode</span>
           </a>
-          <p class="text-sm text-gray-400 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-800 sm:py-2 sm:mt-0 mt-4">© 2020 Rohan Das —
-            <a href="https://twitter.com/knyttneve" class="text-gray-500 ml-1" target="_blank" rel="noopener noreferrer">@RohanDas28</a>
+          <p className="text-sm text-gray-400 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-800 sm:py-2 sm:mt-0 mt-4">© 2020 Rohan Das —
+            <a href="https://twitter.com/knyttneve" className="text-gray-500 ml-1" target="_blank" rel="noopener noreferrer">@RohanDas28</a>
           </p>
         </div>
       </footer>
-
     </>
-  )
+  );
 }
 
-export default App
+export default App;
