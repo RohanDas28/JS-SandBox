@@ -1,6 +1,6 @@
 # JS Code Sandbox
 
-JS Code Sandbox is an online JavaScript code editor that allows you to write and run JavaScript code in a browser environment. It is hosted on Vercel and created by Rohan Das.
+JS Code Sandbox is an online JavaScript code editor that allows you to write and run JavaScript code in a browser environment.
 
 ## Live Demo
 
@@ -59,9 +59,6 @@ If you'd like to contribute to this project, feel free to fork the repository an
 
 This project is licensed under the MIT License - see the License file for details.
 
-## Acknowledgments
-
-- Special thanks to Rohan Das for creating this awesome JS Code Sandbox.
 
 ## Author
 
