@@ -45,7 +45,7 @@ function App() {
   const editorOptions = {
     selectOnLineNumbers: true,
     automaticLayout: true,
-    fontSize: 24,
+    fontSize: 18,
     minimap: {
       enabled: false,
     },
