@@ -62,7 +62,7 @@ This project is licensed under the MIT License - see the License file for detail
 
 ## Author
 
-- [Rohan Das](https://rohandas.github.io)
+- [Rohan Das](https://rohandas28.github.io)
 
 ---
 
